@@ -11,7 +11,7 @@ from scipy.interpolate import interp1d
 from random import choice
 
 def eval_comb(items):
-    jacobian = np.zeros([tot_standards, 5], dtype=np.float64)
+    jacobian = np.zeros([tot_standards, 6], dtype=np.float64)
     
     
     for i in range(tot_standards):
@@ -21,6 +21,12 @@ def eval_comb(items):
         jacobian[i, 2] = items[i][4]
         jacobian[i, 3] = items[i][5]
         jacobian[i, 4] = items[i][6]
+        jacobian[i, 5] = i
+
+    jacobian[:,2] -= np.mean(jacobian[:,2])
+    jacobian[:,3] -= np.mean(jacobian[:,3])
+    jacobian[:,4] -= np.mean(jacobian[:,4])
+    jacobian[:,5] -= np.mean(jacobian[:,5])
 
         
     wmat = np.dot(jacobian.T, jacobian)
