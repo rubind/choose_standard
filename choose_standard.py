@@ -30,7 +30,7 @@ def eval_comb(items):
 
         
     wmat = np.dot(jacobian.T, jacobian)
-    wmat += np.diag(0.00001*np.ones(5, dtype=np.float64))
+    wmat += np.diag(0.00001*np.ones(6, dtype=np.float64))
     cmat = np.linalg.inv(wmat)
 
     diag_vals = np.sqrt(np.diag(cmat))
