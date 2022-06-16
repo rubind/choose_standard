@@ -28,12 +28,16 @@ def eval_comb(items):
     jacobian[:,4] -= np.mean(jacobian[:,4])
     jacobian[:,5] -= np.mean(jacobian[:,5])
 
-        
+    
     wmat = np.dot(jacobian.T, jacobian)
     wmat += np.diag(0.00001*np.ones(6, dtype=np.float64))
     cmat = np.linalg.inv(wmat)
 
     diag_vals = np.sqrt(np.diag(cmat))
+
+    diag_vals[2] = 1
+    diag_vals[3] = 1
+    diag_vals[4] = 1
     return np.prod(diag_vals)
     
     
@@ -126,17 +130,17 @@ for i in tqdm.trange(n_tries):
         for line in best_items:
             print(line[0], line[1].replace(" ", ":"), line[2].replace(" ", ":"), all_mags[line[0]], line[3])
 
-        plt.figure(figsize = (16, 16))
-        for j in range(4):
-            for k in range(4):
+        plt.figure(figsize = (20, 20))
+        for j in range(5):
+            for k in range(5):
                 if k > j:
-                    plt.subplot(4, 4, k*4 + 1 + j)
-                    for line in best_items:
+                    plt.subplot(5, 5, k*5 + 1 + j)
+                    for l, line in enumerate(best_items):
+                        line.append(l)
                         plt.plot(line[3 + j], line[3 + k], '.', color = 'b')
                         plt.text(line[3 + j], line[3 + k], line[0], fontsize = 4)
-                        plt.xlabel(["Airmass", "$U-V$", "$B-V$", "V-I"][j])
-                        plt.ylabel(["Airmass", "$U-V$", "$B-V$", "V-I"][k])
+                        plt.xlabel(["Airmass", "$U-V$", "$B-V$", "V-I", "Sequence"][j])
+                        plt.ylabel(["Airmass", "$U-V$", "$B-V$", "V-I", "Sequence"][k])
                         
         plt.savefig("color_color_best.pdf", bbox_inches = 'tight')
         plt.close()
-
