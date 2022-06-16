@@ -13,6 +13,7 @@ from random import choice
 def eval_comb(items):
     jacobian = np.zeros([tot_standards, 6], dtype=np.float64)
     
+    weights = []
     
     for i in range(tot_standards):
 
@@ -23,11 +24,17 @@ def eval_comb(items):
         jacobian[i, 4] = items[i][6]
         jacobian[i, 5] = i
 
+        if double_weight.count(items[i][0]) == 1:
+            weights.append(2.)
+        else:
+            weights.append(1.)
+
     jacobian[:,2] -= np.mean(jacobian[:,2])
     jacobian[:,3] -= np.mean(jacobian[:,3])
     jacobian[:,4] -= np.mean(jacobian[:,4])
     jacobian[:,5] -= np.mean(jacobian[:,5])
 
+    jacobian = (jacobian.T*weights).T
     
     wmat = np.dot(jacobian.T, jacobian)
     wmat += np.diag(0.00001*np.ones(6, dtype=np.float64))
@@ -51,6 +58,9 @@ date_midnight = sys.argv[1]
 n_tries = int(sys.argv[2])
 tot_standards = int(sys.argv[3])
 start_time_hours = float(sys.argv[4])
+
+
+double_weight = ["GD153", "GD191B2B", "GD71"]
 
 
 
