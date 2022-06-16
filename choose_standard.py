@@ -96,10 +96,10 @@ for i in tqdm.trange(tot_standards):
 
         if this_mag >= min_mag and this_mag <= max_mag:
             tmpitem = SkyCoord(parsed[5].strip() + " " + parsed[6].strip(), unit=(u.hourangle, u.deg), frame="icrs")
-            frame_July13night = AltAz(obstime=midnight + cur_time * u.hour,
+            frame_night = AltAz(obstime=midnight + (cur_time + 0.5/stds_per_hour) * u.hour,
                                       location=MLO)
 
-            tmp_altaz = tmpitem.transform_to(frame_July13night)
+            tmp_altaz = tmpitem.transform_to(frame_night)
 
             if tmp_altaz.alt.deg > min_alt:
                 [x, y] = readcol("/Users/" + subprocess.getoutput("whoami") + "/Dropbox/SCP_Stuff/calspec/" + parsed[7].strip() + ".ascii", 'ff')
