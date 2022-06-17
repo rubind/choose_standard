@@ -126,7 +126,7 @@ print(std_RA_Dec_airmass_colors)
 
 
 best_val = 1e20
-
+pars_list = ["Airmass", "$U-V$", "$B-V$", "V-I", "Sequence"]
 
 for i in tqdm.trange(n_tries):
     
@@ -140,7 +140,7 @@ for i in tqdm.trange(n_tries):
         for line in best_items:
             print(line[0], line[1].replace(" ", ":"), line[2].replace(" ", ":"), all_mags[line[0]], line[3])
 
-        plt.figure(figsize = (20, 20))
+        plt.figure(figsize = (25, 25))
         for j in range(5):
             for k in range(5):
                 if k > j:
@@ -149,8 +149,12 @@ for i in tqdm.trange(n_tries):
                         line.append(l)
                         plt.plot(line[3 + j], line[3 + k], '.', color = 'b')
                         plt.text(line[3 + j], line[3 + k], line[0], fontsize = 4)
-                        plt.xlabel(["Airmass", "$U-V$", "$B-V$", "V-I", "Sequence"][j])
-                        plt.ylabel(["Airmass", "$U-V$", "$B-V$", "V-I", "Sequence"][k])
-                        
+                        plt.xlabel(pars_list[j])
+                        plt.ylabel(pars_list[k])
+                if k == j:
+                    plt.subplot(5, 5, k*5+1+j)
+                    plt.hist([line[3+j] for line in best_items])
+                    plt.title(pars_list[k])
+                    
         plt.savefig("color_color_best.pdf", bbox_inches = 'tight')
         plt.close()
